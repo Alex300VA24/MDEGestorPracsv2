@@ -451,10 +451,10 @@
     <!-- Modal CUI (Two-Factor Authentication) -->
     <div id="modalValidarCUI" class="hidden fixed inset-0 z-50 overflow-y-auto" style="background-color: rgba(0, 0, 0, 0.75); backdrop-filter: blur(8px);">
         <div class="flex items-center justify-center min-h-screen px-4 py-8">
-            <div class="relative bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden modal-appear">
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden modal-appear">
                 
                 <!-- Modal Header -->
-                <div class="relative bg-gradient-to-r from-purple-600 via-purple-700 to-pink-600 px-8 py-6 overflow-hidden">
+                <div class="relative bg-gradient-to-r from-purple-600 via-purple-700 to-pink-600 px-6 py-5 overflow-hidden">
                     <div class="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -mr-24 -mt-24"></div>
                     <div class="relative z-10">
                         <div class="flex items-center justify-center mb-2">
@@ -474,28 +474,28 @@
                 <!-- Modal Body -->
                 <form id="validarCUIForm" method="POST">
                     @csrf
-                    <div class="px-8 py-10">
+                    <div class="px-6 py-6">
                         <!-- Instruction -->
-                        <div class="text-center mb-8">
-                            <p class="text-gray-700 mb-6 leading-relaxed text-lg font-medium">
+                        <div class="text-center mb-6">
+                            <p class="text-gray-700 mb-4 leading-relaxed text-base font-medium">
                                 Ingresa tu <span class="gradient-text font-bold">Código Único de Identificación (CUI)</span>
                             </p>
-                            <p class="text-gray-500 text-sm mb-6">
+                            <p class="text-gray-500 text-sm mb-4">
                                 Localiza el código en la parte posterior de tu DNI
                             </p>
                             
                             <!-- DNI Guide Image -->
-                            <div class="inline-block bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 shadow-inner">
+                            <div class="inline-block bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-4 shadow-inner">
                                 <img 
                                     src="{{ asset('images/dniGuiCUI.svg') }}" 
                                     alt="Guía CUI DNI"
-                                    class="max-w-full h-auto rounded-xl shadow-lg"
+                                    class="max-w-full h-40 md:h-44 rounded-xl shadow-lg"
                                 />
                             </div>
                         </div>
 
                         <!-- CUI Input Grid -->
-                        <div class="mb-8">
+                        <div class="mb-6">
                             <label class="block text-center text-gray-700 font-semibold mb-6 text-sm uppercase tracking-wider">
                                 Ingresa el dígito CUI
                             </label>
@@ -523,7 +523,7 @@
                     </div>
 
                     <!-- Modal Footer -->
-                    <div class="bg-gray-50 px-8 py-6 flex flex-col-reverse sm:flex-row gap-3 justify-end">
+                    <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row gap-3 justify-end">
                         <button 
                             type="button"
                             id="btnCancelarCUI"

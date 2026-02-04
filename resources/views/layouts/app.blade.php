@@ -34,6 +34,9 @@
         :root {
             --sidebar-width: 288px;
             --sidebar-collapsed-width: 80px;
+            --shadow-primary: 0 24px 50px -22px rgba(37, 99, 235, 0.45), 0 12px 28px -18px rgba(15, 23, 42, 0.35);
+            --shadow-surface: 0 14px 30px -18px rgba(15, 23, 42, 0.22), 0 10px 24px -16px rgba(59, 130, 246, 0.25);
+            --shadow-toggle: 0 12px 24px -10px rgba(14, 116, 144, 0.55), 0 8px 18px -12px rgba(37, 99, 235, 0.45);
         }
 
         /* Dark mode styles */
@@ -169,6 +172,7 @@
         .sidebar {
             width: var(--sidebar-width);
             transition: width 0.3s ease, transform 0.3s ease;
+            box-shadow: var(--shadow-primary);
         }
 
         .sidebar.collapsed {
@@ -187,6 +191,10 @@
 
         .sidebar-text {
             transition: opacity 0.2s ease, width 0.2s ease;
+        }
+
+        .dark .sidebar {
+            box-shadow: 0 26px 60px -26px rgba(2, 6, 23, 0.9), 0 14px 30px -20px rgba(37, 99, 235, 0.35);
         }
 
         @keyframes slideInLeft {
@@ -364,25 +372,66 @@
             height: 300px;
         }
 
+        /* Dashboard shadow tuning */
+        header {
+            box-shadow: var(--shadow-surface);
+        }
+
+        .dark header {
+            box-shadow: 0 16px 34px -22px rgba(2, 6, 23, 0.8), 0 10px 22px -18px rgba(59, 130, 246, 0.35);
+        }
+
+        footer {
+            box-shadow: var(--shadow-surface);
+        }
+
+        .dark footer {
+            box-shadow: 0 14px 30px -22px rgba(2, 6, 23, 0.75), 0 8px 18px -18px rgba(59, 130, 246, 0.25);
+        }
+
+        /* Toggle button styling */
+        #sidebarToggleDesktop {
+            box-shadow: var(--shadow-toggle);
+            border-color: rgba(34, 211, 238, 0.55);
+        }
+
+        #sidebarToggleDesktop:hover {
+            box-shadow: 0 14px 26px -10px rgba(8, 145, 178, 0.65), 0 10px 22px -12px rgba(37, 99, 235, 0.55);
+        }
+
+        .dark #sidebarToggleDesktop {
+            box-shadow: 0 14px 28px -12px rgba(2, 6, 23, 0.9), 0 10px 24px -14px rgba(14, 116, 144, 0.55);
+            border-color: rgba(56, 189, 248, 0.55);
+        }
+
         /* Modal styling mejorado */
         #logoutModal {
-            background-color: rgba(15, 23, 42, 0.98);
+            background-color: transparent;
         }
 
         #logoutModal::backdrop {
-            background-color: rgba(0, 0, 0, 0.95) !important;
+            background-color: rgba(0, 0, 0, 0.98) !important;
             backdrop-filter: blur(8px);
         }
 
         .dark #logoutModal {
-            background-color: rgba(15, 23, 42, 0.98);
+            background-color: transparent;
             z-index: 9999;
         }
 
         .dark #logoutModal::backdrop {
-            background-color: rgba(0, 0, 0, 0.97) !important;
+            background-color: rgba(0, 0, 0, 0.99) !important;
             backdrop-filter: blur(12px);
             z-index: 9998;
+        }
+
+        /* Opacity classes para el overlay */
+        #logoutOverlay.opacity-100 {
+            opacity: 1 !important;
+        }
+
+        #logoutOverlay.opacity-0 {
+            opacity: 0 !important;
         }
 
         /* Asegurar que el modal esté siempre por encima */
@@ -397,6 +446,23 @@
         #logoutModal > div:last-child {
             z-index: 9999 !important;
         }
+
+        @keyframes modal-in {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .animate-modal-in {
+            animation: modal-in 0.25s ease-out;
+        }
+
+
 
         /* Dark mode para el gráfico de estadísticas */
         .dark .chart-placeholder-dark {
@@ -453,7 +519,7 @@
             <button 
                 id="sidebarToggleDesktop"
                 onclick="toggleSidebarCollapse()"
-                class="hidden lg:flex absolute -right-3 top-1/2 transform -translate-y-1/2 z-50 w-6 h-12 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:from-blue-600 dark:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 rounded-r-lg items-center justify-center text-white shadow-lg transition-all duration-200 border-2 border-l-0 border-blue-400 dark:border-blue-500"
+                class="hidden lg:flex absolute -right-3 top-1/2 transform -translate-y-1/2 z-50 w-6 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-700 dark:from-cyan-600 dark:to-blue-700 dark:hover:from-cyan-500 dark:hover:to-blue-800 rounded-r-lg items-center justify-center text-white shadow-lg transition-all duration-200 border-2 border-l-0 border-cyan-300/80 dark:border-cyan-400/70"
             >
                 <i id="toggleIcon" class="fas fa-chevron-left text-xs"></i>
             </button>
@@ -576,46 +642,89 @@
     </div>
 
     <!-- Logout Confirmation Modal -->
-    <div id="logoutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center">
-        <div class="absolute inset-0 bg-black/85 backdrop-blur-lg" onclick="hideLogoutModal()"></div>
-        <div class="relative flex items-center justify-center min-h-screen px-4 z-50">
-            <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl dark:shadow-2xl max-w-md w-full overflow-hidden transform transition-all" style="animation: fadeInUp 0.3s ease-out;">
-                <div class="bg-gradient-to-r from-red-500 to-orange-500 dark:from-red-600 dark:to-orange-600 px-6 py-6">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle text-white text-2xl"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-2xl font-bold text-white bricolage-font">Cerrar Sesión</h3>
-                            <p class="text-orange-100 text-sm mt-1">Confirma esta acción</p>
-                        </div>
+    <div id="logoutModal" class="fixed inset-0 z-50 hidden">
+
+        <!-- Overlay -->
+        <div
+            id="logoutOverlay"
+            class="fixed inset-0 z-40
+                bg-slate-900/50 dark:bg-slate-950/70
+                backdrop-blur-sm
+                transition-opacity duration-300"
+            style="opacity: 0;"
+            onclick="hideLogoutModal()">
+        </div>
+
+        <!-- Modal Container -->
+        <div class="relative z-50 flex items-center justify-center min-h-screen px-4">
+            <div
+                id="logoutBox"
+                class="w-full max-w-md rounded-2xl shadow-2xl
+                    bg-white dark:bg-slate-900
+                    border border-slate-200 dark:border-slate-800
+                    transform scale-95 translate-y-6 opacity-0
+                    transition-all duration-300">
+
+                <!-- Header -->
+                <div class="flex items-center gap-4 px-6 py-5
+                            border-b border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center justify-center w-12 h-12 rounded-full
+                                bg-red-100 text-red-600
+                                dark:bg-red-500/20 dark:text-red-400">
+                        <i class="fas fa-sign-out-alt text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                            Cerrar sesión
+                        </h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">
+                            Acción de seguridad
+                        </p>
                     </div>
                 </div>
-                <div class="p-8 bg-white dark:bg-slate-900">
-                    <p class="text-gray-900 dark:text-gray-100 mb-8 text-center leading-relaxed font-medium">
-                        ¿Estás seguro que deseas cerrar tu sesión? Tendrás que volver a iniciar sesión para acceder al sistema.
+
+                <!-- Body -->
+                <div class="px-6 py-6">
+                    <p class="text-slate-700 dark:text-slate-300 leading-relaxed">
+                        ¿Estás seguro de que deseas cerrar tu sesión actual?  
+                        Tendrás que volver a iniciar sesión para acceder al sistema.
                     </p>
-                    <div class="flex space-x-3">
-                        <button 
-                            onclick="hideLogoutModal()"
-                            class="flex-1 px-4 py-3 border-2 border-gray-300 dark:border-gray-500 text-gray-800 dark:text-gray-100 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-800 font-semibold transition-all duration-200"
-                        >
-                            Cancelar
-                        </button>
-                        <form method="POST" action="{{ route('logout') }}" class="flex-1">
-                            @csrf
-                            <button 
-                                type="submit"
-                                class="w-full px-4 py-3 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 dark:from-red-600 dark:to-orange-600 dark:hover:from-red-700 dark:hover:to-orange-700 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
-                            >
-                                Sí, cerrar sesión
-                            </button>
-                        </form>
-                    </div>
                 </div>
+
+                <!-- Footer -->
+                <div class="flex justify-end gap-3 px-6 py-4
+                            bg-slate-50 dark:bg-slate-800
+                            border-t border-slate-200 dark:border-slate-800
+                            rounded-b-2xl">
+
+                    <button
+                        onclick="hideLogoutModal()"
+                        class="px-4 py-2 rounded-lg text-sm font-medium
+                            text-slate-700 dark:text-slate-300
+                            hover:bg-slate-200 dark:hover:bg-slate-700
+                            transition">
+                        Cancelar
+                    </button>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button
+                            type="submit"
+                            class="px-5 py-2 rounded-lg text-sm font-semibold text-white
+                                bg-red-600 hover:bg-red-700
+                                dark:bg-red-500 dark:hover:bg-red-600
+                                shadow-sm hover:shadow-md transition">
+                            Cerrar sesión
+                        </button>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
+
+
+
 
     <script>
         // Initialize dark mode from localStorage
@@ -696,14 +805,39 @@
             overlay.classList.toggle('hidden');
         }
 
-        // Logout modal
-        function showLogoutModal() {
-            document.getElementById('logoutModal').classList.remove('hidden');
-        }
+    function showLogoutModal() {
+        const modal = document.getElementById('logoutModal')
+        const overlay = document.getElementById('logoutOverlay')
+        const box = document.getElementById('logoutBox')
 
-        function hideLogoutModal() {
-            document.getElementById('logoutModal').classList.add('hidden');
-        }
+        modal.classList.remove('hidden')
+        document.body.classList.add('overflow-hidden')
+
+        // Aplicar estilos al overlay para asegurar que sea visible
+        overlay.style.opacity = '1'
+
+        // Espera un frame para que la transición funcione
+        requestAnimationFrame(() => {
+            box.classList.remove('opacity-0', 'scale-95', 'translate-y-6')
+            box.classList.add('opacity-100', 'scale-100', 'translate-y-0')
+        })
+    }
+
+    function hideLogoutModal() {
+        const modal = document.getElementById('logoutModal')
+        const overlay = document.getElementById('logoutOverlay')
+        const box = document.getElementById('logoutBox')
+
+        overlay.style.opacity = '0'
+        box.classList.add('opacity-0', 'scale-95', 'translate-y-6')
+
+        setTimeout(() => {
+            modal.classList.add('hidden')
+            document.body.classList.remove('overflow-hidden')
+        }, 300)
+    }
+
+
 
         // Update current date/time
         function updateDateTime() {
